@@ -1,15 +1,19 @@
+using Questao5.Infrastructure.Sqlite;
+using MediatR;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.Configure<DatabaseConfig>(builder.Configuration.GetSection("DatabaseConfig"));
+builder.Services.AddMediatR(typeof(Program).Assembly);
+
+// Registro do IDatabaseBootstrap para configuração inicial do banco de dados
+builder.Services.AddSingleton<IDatabaseBootstrap, DatabaseBootstrap>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -17,9 +21,14 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
+
+// Executa o método Setup() de DatabaseBootstrap para configurar o banco de dados
+using (var scope = app.Services.CreateScope())
+{
+    var dbBootstrap = scope.ServiceProvider.GetRequiredService<IDatabaseBootstrap>();
+    dbBootstrap.Setup();
+}
 
 app.Run();
