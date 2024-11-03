@@ -97,9 +97,9 @@
               "target": "Package",
               "version": "[3.1.2, )"
             },
-            "xunit": {
+            "xunit.abstractions": {
               "target": "Package",
-              "version": "[2.9.2, )"
+              "version": "[2.0.0, )"
             },
             "xunit.runner.visualstudio": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers",

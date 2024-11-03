@@ -8,7 +8,6 @@ using MediatR;
 using Dapper;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Options;
-using Questao5.Domain.Entities;
 
 namespace Questao5.Application.Handlers
 {
